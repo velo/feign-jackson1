@@ -1,5 +1,5 @@
-/*
- * Copyright 2013 Netflix, Inc.
+/**
+ * Copyright (C) 2016 Marvin Herman Froeder (marvin@marvinformatics.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -40,7 +40,7 @@ public class JacksonDecoder implements Decoder {
 
   public JacksonDecoder(Iterable<Module> modules) {
     this(new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
-             .registerModules(modules));
+            .registerModules(modules));
   }
 
   public JacksonDecoder(ObjectMapper mapper) {

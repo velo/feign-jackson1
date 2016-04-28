@@ -1,3 +1,18 @@
+/**
+ * Copyright (C) 2016 Marvin Herman Froeder (marvin@marvinformatics.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package feign.jackson;
 
 import com.fasterxml.jackson.core.JsonGenerator;
@@ -33,15 +48,15 @@ import static org.junit.Assert.assertNull;
 public class JacksonCodecTest {
 
   private String zonesJson = ""//
-                             + "[\n"//
-                             + "  {\n"//
-                             + "    \"name\": \"denominator.io.\"\n"//
-                             + "  },\n"//
-                             + "  {\n"//
-                             + "    \"name\": \"denominator.io.\",\n"//
-                             + "    \"id\": \"ABCD\"\n"//
-                             + "  }\n"//
-                             + "]\n";
+          + "[\n"//
+          + "  {\n"//
+          + "    \"name\": \"denominator.io.\"\n"//
+          + "  },\n"//
+          + "  {\n"//
+          + "    \"name\": \"denominator.io.\",\n"//
+          + "    \"id\": \"ABCD\"\n"//
+          + "  }\n"//
+          + "]\n";
 
   @Test
   public void encodesMapObjectNumericalValuesAsInteger() throws Exception {
@@ -52,9 +67,9 @@ public class JacksonCodecTest {
     new JacksonEncoder().encode(map, map.getClass(), template);
 
     assertThat(template).hasBody(""//
-                                 + "{\n" //
-                                 + "  \"foo\" : 1\n" //
-                                 + "}");
+            + "{\n" //
+            + "  \"foo\" : 1\n" //
+            + "}");
   }
 
   @Test
@@ -68,10 +83,10 @@ public class JacksonCodecTest {
     }.getType(), template);
 
     assertThat(template).hasBody(""//
-                                 + "{\n" //
-                                 + "  \"foo\" : 1,\n" //
-                                 + "  \"bar\" : [ 2, 3 ]\n" //
-                                 + "}");
+            + "{\n" //
+            + "  \"foo\" : 1,\n" //
+            + "  \"bar\" : [ 2, 3 ]\n" //
+            + "}");
   }
 
   @Test
@@ -80,18 +95,15 @@ public class JacksonCodecTest {
     zones.add(new Zone("denominator.io."));
     zones.add(new Zone("denominator.io.", "ABCD"));
 
-    Response response =
-        Response.create(200, "OK", Collections.<String, Collection<String>>emptyMap(), zonesJson,
-                        UTF_8);
+    Response response = Response.create(200, "OK", Collections.<String, Collection<String>>emptyMap(), zonesJson,
+            UTF_8);
     assertEquals(zones, new JacksonDecoder().decode(response, new TypeReference<List<Zone>>() {
     }.getType()));
   }
 
   @Test
   public void nullBodyDecodesToNull() throws Exception {
-    Response
-        response =
-        Response
+    Response response = Response
             .create(204, "OK", Collections.<String, Collection<String>>emptyMap(), (byte[]) null);
     assertNull(new JacksonDecoder().decode(response, String.class));
   }
@@ -99,24 +111,23 @@ public class JacksonCodecTest {
   @Test
   public void emptyBodyDecodesToNull() throws Exception {
     Response response = Response.create(204, "OK",
-                                        Collections.<String, Collection<String>>emptyMap(),
-                                        new byte[0]);
+            Collections.<String, Collection<String>>emptyMap(),
+            new byte[0]);
     assertNull(new JacksonDecoder().decode(response, String.class));
   }
 
   @Test
   public void customDecoder() throws Exception {
     JacksonDecoder decoder = new JacksonDecoder(
-        Arrays.<Module>asList(
-            new SimpleModule().addDeserializer(Zone.class, new ZoneDeserializer())));
+            Arrays.<Module>asList(
+                    new SimpleModule().addDeserializer(Zone.class, new ZoneDeserializer())));
 
     List<Zone> zones = new LinkedList<Zone>();
     zones.add(new Zone("DENOMINATOR.IO."));
     zones.add(new Zone("DENOMINATOR.IO.", "ABCD"));
 
-    Response response =
-        Response.create(200, "OK", Collections.<String, Collection<String>>emptyMap(), zonesJson,
-                        UTF_8);
+    Response response = Response.create(200, "OK", Collections.<String, Collection<String>>emptyMap(), zonesJson,
+            UTF_8);
     assertEquals(zones, decoder.decode(response, new TypeReference<List<Zone>>() {
     }.getType()));
   }
@@ -124,7 +135,7 @@ public class JacksonCodecTest {
   @Test
   public void customEncoder() throws Exception {
     JacksonEncoder encoder = new JacksonEncoder(
-        Arrays.<Module>asList(new SimpleModule().addSerializer(Zone.class, new ZoneSerializer())));
+            Arrays.<Module>asList(new SimpleModule().addSerializer(Zone.class, new ZoneSerializer())));
 
     List<Zone> zones = new LinkedList<Zone>();
     zones.add(new Zone("denominator.io."));
@@ -135,12 +146,12 @@ public class JacksonCodecTest {
     }.getType(), template);
 
     assertThat(template).hasBody("" //
-                                 + "[ {\n"
-                                 + "  \"name\" : \"DENOMINATOR.IO.\"\n"
-                                 + "}, {\n"
-                                 + "  \"name\" : \"DENOMINATOR.IO.\",\n"
-                                 + "  \"id\" : \"ABCD\"\n"
-                                 + "} ]");
+            + "[ {\n"
+            + "  \"name\" : \"DENOMINATOR.IO.\"\n"
+            + "}, {\n"
+            + "  \"name\" : \"DENOMINATOR.IO.\",\n"
+            + "  \"id\" : \"ABCD\"\n"
+            + "} ]");
   }
 
   static class Zone extends LinkedHashMap<String, Object> {
@@ -192,7 +203,7 @@ public class JacksonCodecTest {
 
     @Override
     public void serialize(Zone value, JsonGenerator jgen, SerializerProvider provider)
-        throws IOException {
+            throws IOException {
       jgen.writeStartObject();
       for (Map.Entry<String, Object> entry : value.entrySet()) {
         jgen.writeFieldName(entry.getKey());
@@ -206,8 +217,8 @@ public class JacksonCodecTest {
   @Test
   public void notFoundDecodesToEmpty() throws Exception {
     Response response = Response.create(404, "NOT FOUND",
-        Collections.<String, Collection<String>>emptyMap(),
-        (byte[]) null);
+            Collections.<String, Collection<String>>emptyMap(),
+            (byte[]) null);
     assertThat((byte[]) new JacksonDecoder().decode(response, byte[].class)).isEmpty();
   }
 }

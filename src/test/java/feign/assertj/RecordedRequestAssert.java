@@ -1,5 +1,5 @@
-/*
- * Copyright 2015 Netflix, Inc.
+/**
+ * Copyright (C) 2016 Marvin Herman Froeder (marvin@marvinformatics.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -41,7 +41,7 @@ import static org.assertj.core.data.MapEntry.entry;
 import static org.assertj.core.error.ShouldNotContain.shouldNotContain;
 
 public final class RecordedRequestAssert
-    extends AbstractAssert<RecordedRequestAssert, RecordedRequest> {
+        extends AbstractAssert<RecordedRequestAssert, RecordedRequest> {
 
   ByteArrays arrays = ByteArrays.instance();
   Objects objects = Objects.instance();
@@ -75,8 +75,7 @@ public final class RecordedRequestAssert
     byte[] compressedBody = actual.getBody().readByteArray();
     byte[] uncompressedBody;
     try {
-      uncompressedBody =
-          Util.toByteArray(new GZIPInputStream(new ByteArrayInputStream(compressedBody)));
+      uncompressedBody = Util.toByteArray(new GZIPInputStream(new ByteArrayInputStream(compressedBody)));
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
@@ -89,8 +88,7 @@ public final class RecordedRequestAssert
     byte[] compressedBody = actual.getBody().readByteArray();
     byte[] uncompressedBody;
     try {
-      uncompressedBody =
-          Util.toByteArray(new InflaterInputStream(new ByteArrayInputStream(compressedBody)));
+      uncompressedBody = Util.toByteArray(new InflaterInputStream(new ByteArrayInputStream(compressedBody)));
     } catch (IOException e) {
       throw new RuntimeException(e);
     }

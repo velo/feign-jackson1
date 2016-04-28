@@ -1,5 +1,5 @@
-/*
- * Copyright 2015 Netflix, Inc.
+/**
+ * Copyright (C) 2016 Marvin Herman Froeder (marvin@marvinformatics.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,7 +26,7 @@ import feign.RequestTemplate;
 import static feign.Util.UTF_8;
 
 public final class RequestTemplateAssert
-    extends AbstractAssert<RequestTemplateAssert, RequestTemplate> {
+        extends AbstractAssert<RequestTemplateAssert, RequestTemplate> {
 
   ByteArrays arrays = ByteArrays.instance();
   Objects objects = Objects.instance();
