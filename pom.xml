@@ -19,18 +19,48 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>com.marvinformatics</groupId>
-  <artifactId>${name}</artifactId>
+  <groupId>com.marvinformatics.feign</groupId>
+  <artifactId>feign-jackson1</artifactId>
   <version>0.1-SNAPSHOT</version>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    <coveralls.token></coveralls.token>
-    <java.version>1.8</java.version>
+    <coveralls.token>wSPAPFGkm8ulzgNbH0vA0HnHeymapT17r</coveralls.token>
+    <java.version>1.7</java.version>
   </properties>
 
-  <dependencies></dependencies>
+ <dependencies>
+    <dependency>
+      <groupId>com.netflix.feign</groupId>
+      <artifactId>feign-core</artifactId>
+      <version>8.16.2</version>
+    </dependency>
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-databind</artifactId>
+      <version>2.6.4</version>
+    </dependency>
+
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.12</version>
+	  <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.squareup.okhttp</groupId>
+      <artifactId>mockwebserver</artifactId>
+      <version>2.7.5</version>
+	  <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.assertj</groupId>
+      <artifactId>assertj-core</artifactId>
+      <version>1.7.1</version>
+	  <scope>test</scope>
+    </dependency>
+  </dependencies>
 
   <build>
     <pluginManagement>
@@ -221,9 +251,9 @@
     </plugins>
   </build>
 
-  <url>https://github.com/${owner}/${name}/</url>
+  <url>https://github.com/velo/feign-jackson1/</url>
 
-  <inceptionYear>${year}</inceptionYear>
+  <inceptionYear>2016</inceptionYear>
 
   <licenses>
     <license>
@@ -243,9 +273,9 @@
   </developers>
 
   <scm>
-    <connection>scm:git:git@github.com:${owner}/${name}.git</connection>
-    <developerConnection>scm:git:git@github.com:${owner}/${name}.git</developerConnection>
-    <url>https://github.com/${owner}/${name}/</url>
+    <connection>scm:git:git@github.com:velo/feign-jackson1.git</connection>
+    <developerConnection>scm:git:git@github.com:velo/feign-jackson1.git</developerConnection>
+    <url>https://github.com/velo/feign-jackson1/</url>
   </scm>
 
   <distributionManagement>
