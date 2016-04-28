@@ -15,15 +15,16 @@
  */
 package feign.jackson;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JavaType;
-import com.fasterxml.jackson.databind.Module;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-
+import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.Collections;
+
+import org.codehaus.jackson.JsonProcessingException;
+import org.codehaus.jackson.map.Module;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.map.SerializationConfig;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
+import org.codehaus.jackson.type.JavaType;
 
 import feign.RequestTemplate;
 import feign.codec.EncodeException;
@@ -39,9 +40,12 @@ public class JacksonEncoder implements Encoder {
 
   public JacksonEncoder(Iterable<Module> modules) {
     this(new ObjectMapper()
-            .setSerializationInclusion(JsonInclude.Include.NON_NULL)
-            .configure(SerializationFeature.INDENT_OUTPUT, true)
-            .registerModules(modules));
+            .setSerializationInclusion(JsonSerialize.Inclusion.NON_NULL)
+            .configure(SerializationConfig.Feature.INDENT_OUTPUT, true));
+    for (Module module : modules) {
+      this.mapper.registerModule(module);
+    }
+
   }
 
   public JacksonEncoder(ObjectMapper mapper) {
@@ -52,8 +56,8 @@ public class JacksonEncoder implements Encoder {
   public void encode(Object object, Type bodyType, RequestTemplate template) {
     try {
       JavaType javaType = mapper.getTypeFactory().constructType(bodyType);
-      template.body(mapper.writerFor(javaType).writeValueAsString(object));
-    } catch (JsonProcessingException e) {
+      template.body(mapper.writerWithType(javaType).writeValueAsString(object));
+    } catch (IOException e) {
       throw new EncodeException(e.getMessage(), e);
     }
   }

@@ -15,18 +15,11 @@
  */
 package feign.jackson;
 
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonToken;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.DeserializationContext;
-import com.fasterxml.jackson.databind.Module;
-import com.fasterxml.jackson.databind.SerializerProvider;
-import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
-import com.fasterxml.jackson.databind.module.SimpleModule;
-import com.fasterxml.jackson.databind.ser.std.StdSerializer;
-
-import org.junit.Test;
+import static feign.Util.UTF_8;
+import static feign.assertj.FeignAssertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -37,13 +30,21 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import org.codehaus.jackson.JsonGenerator;
+import org.codehaus.jackson.JsonParser;
+import org.codehaus.jackson.JsonToken;
+import org.codehaus.jackson.Version;
+import org.codehaus.jackson.map.DeserializationContext;
+import org.codehaus.jackson.map.JsonSerializer;
+import org.codehaus.jackson.map.Module;
+import org.codehaus.jackson.map.SerializerProvider;
+import org.codehaus.jackson.map.deser.std.StdDeserializer;
+import org.codehaus.jackson.map.module.SimpleModule;
+import org.codehaus.jackson.type.TypeReference;
+import org.junit.Test;
+
 import feign.RequestTemplate;
 import feign.Response;
-
-import static feign.Util.UTF_8;
-import static feign.assertj.FeignAssertions.assertThat;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
 
 public class JacksonCodecTest {
 
@@ -120,7 +121,7 @@ public class JacksonCodecTest {
   public void customDecoder() throws Exception {
     JacksonDecoder decoder = new JacksonDecoder(
             Arrays.<Module>asList(
-                    new SimpleModule().addDeserializer(Zone.class, new ZoneDeserializer())));
+                    newModule().addDeserializer(Zone.class, new ZoneDeserializer())));
 
     List<Zone> zones = new LinkedList<Zone>();
     zones.add(new Zone("DENOMINATOR.IO."));
@@ -135,7 +136,7 @@ public class JacksonCodecTest {
   @Test
   public void customEncoder() throws Exception {
     JacksonEncoder encoder = new JacksonEncoder(
-            Arrays.<Module>asList(new SimpleModule().addSerializer(Zone.class, new ZoneSerializer())));
+            Arrays.<Module>asList(newModule().addSerializer(Zone.class, new ZoneSerializer())));
 
     List<Zone> zones = new LinkedList<Zone>();
     zones.add(new Zone("denominator.io."));
@@ -152,6 +153,10 @@ public class JacksonCodecTest {
             + "  \"name\" : \"DENOMINATOR.IO.\",\n"
             + "  \"id\" : \"ABCD\"\n"
             + "} ]");
+  }
+
+  private SimpleModule newModule() {
+    return new SimpleModule("PolymorphicAnalysisInfoDeserializerModule", new Version(1, 0, 0, null));
   }
 
   static class Zone extends LinkedHashMap<String, Object> {
@@ -186,7 +191,7 @@ public class JacksonCodecTest {
       jp.nextToken();
       while (jp.nextToken() != JsonToken.END_OBJECT) {
         String name = jp.getCurrentName();
-        String value = jp.getValueAsString();
+        String value = jp.getText();
         if (value != null) {
           zone.put(name, value.toUpperCase());
         }
@@ -195,11 +200,7 @@ public class JacksonCodecTest {
     }
   }
 
-  static class ZoneSerializer extends StdSerializer<Zone> {
-
-    public ZoneSerializer() {
-      super(Zone.class);
-    }
+  static class ZoneSerializer extends JsonSerializer<Zone> {
 
     @Override
     public void serialize(Zone value, JsonGenerator jgen, SerializerProvider provider)
