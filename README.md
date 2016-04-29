@@ -1,4 +1,4 @@
-Jackson Codec
+Jackson1 Codec
 ===================
 
 [![Build Status](https://travis-ci.org/velo/feign-jackson1.svg?branch=master)](https://travis-ci.org/velo/feign-jackson1?branch=master) 
@@ -8,7 +8,9 @@ Jackson Codec
 [![Forks](https://img.shields.io/github/forks/velo/feign-jackson1.svg)](https://github.com/velo/feign-jackson1/network) 
 [![Stars](https://img.shields.io/github/stars/velo/feign-jackson1.svg)](https://github.com/velo/feign-jackson1/stargazers)
 
-This module adds support for encoding and decoding JSON via Jackson.
+This module adds support for encoding and decoding JSON via Jackson1.
+
+This is pretty much a copy of https://github.com/Netflix/feign/tree/master/jackson, but different Jackson version
 
 Add `JacksonEncoder` and/or `JacksonDecoder` to your `Feign.Builder` like so:
 

@@ -23,6 +23,9 @@
   <artifactId>feign-jackson1</artifactId>
   <version>0.1-SNAPSHOT</version>
 
+  <name>feign-jackson1</name>
+  <description>This module adds support for encoding and decoding JSON via Jackson1.</description>
+
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
