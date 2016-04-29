@@ -21,7 +21,7 @@
 
   <groupId>com.marvinformatics.feign</groupId>
   <artifactId>feign-jackson1</artifactId>
-  <version>0.1-SNAPSHOT</version>
+  <version>0.1</version>
 
   <name>feign-jackson1</name>
   <description>This module adds support for encoding and decoding JSON via Jackson1.</description>
